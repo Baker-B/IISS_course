@@ -1,6 +1,6 @@
 [
     {
-        "disease": "acuteBronchitis",
+        "tree": "acuteBronchitis",
         "ageGroup": ["children", "elderly"],
         "gender": ["female", "male"],
         "familyHistory": "N",
