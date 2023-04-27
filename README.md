@@ -33,149 +33,80 @@ v16.15.0
 - Фронт зроблено на view engine `handlebars`. Статичні файлі фронта розташовано в каталозі `./public/`.
 - Всі програми-залежності розташовано в каталозі `./node_modules/` (це є стандартом в проєктах на NodeJS)
 
+## :notebook: Опис системи
+
+Проста експертна система для діагностики респіраторних захворювань, написана на JavaScript. 
+- Застосунок розроблено на базі фреймворку [Express](https://expressjs.com/uk/) - фреймворкe для веб-застосунків, побудованих на Node.js.
+- Експертна система розроблена з використанням пакету [rools](https://github.com/frankthelen/rools), невеликого рішення для побудови та обробки правил для Node.js, та [Handlebars.js](https://github.com/handlebars-lang/handlebars.js), мови семантичних шаблонів для JavaScript. 
+
+<p align=center><img src="/docs/img/ui.png"></p>
+<p align="center"><i>Інтерфейс експертної системи</i></p>
+
+Для диференціальної діагностики було відібрано 16 респіраторних захворювань:
+
+- Гострий бронхіт
+- Астма
+- Бронхоектази
+- Бронхіоліт
+- Хронічне обструктивне захворювання легень (ХОЗЛ)
+- Застуда
+- COVID-19
+- Круп
+- Муковісцидоз
+- Грип
+- Рак легенів
+- Професійні захворювання легень
+- Коклюш
+- Пневмонія
+- Риносинусит
+- Туберкульоз
+
+Диференціальний діагноз ґрунтується на сукупності 13 факторів, які поділяються на категорії:
+
+- __Епідеміологічні фактори__
+  - Вікова група
+  - Стать
+  - Сімейний анамнез
+  - Тютюнопаління в анамнезі
+- __Клінічні фактори__
+  - Тривалість
+  - Біль у грудях
+  - Кашель
+  - Кашель з кров'ю (кровохаркання)
+  - Лихоманка
+  - Прискорене дихання (тахіпное)
+  - Прискорене серцебиття (тахікардія)
+  - Задишка (диспное)
+  - Хрипи
+
+## :evergreen_tree: Побудова дерева рішень за допомогою алгоритму ID3
+
+Для генерації дерева рішень для експертної системи використовується алгоритм [Iterative Dichotomiser 3 (ID3)](https://uk.wikipedia.org/wiki/ID3_(%D0%B0%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC)).
+Дерево рішень може бути перетворено на порівнянний набір правил, в якому кожне правило відповідає можливому шляху від кореневого вузла до будь-якого листового вузла. Набір правил використовується як механізм правил для експертної системи.
+
+<p align=center><img src="/docs/img/decision_tree.png"></p>
+<p align="center"><i>Дерево рішень</i></p>
+
+:unlock: **Зауважте, що лише 9 з 13 факторів використовуються для отримання правил прийняття рішень.
+
+Це пов'язано з 2 причинами:
+
+- Ці 9 факторів: 
+куріння в анамнезі, біль у грудях, кашель, кашель з кров'ю, лихоманка, прискорене дихання, прискорене серцебиття, задишка і хрипи -
+є первинними предикторами або індикаторами респіраторних захворювань.
+Ці предиктори є симптомами, які викликані безпосередньо певним респіраторним захворюванням. 
+Куріння в анамнезі є винятком. Це не симптом, але він є "провідною причиною" більшості респіраторних захворювань.
+- 4 виключені фактори: 
+вікова група, стать, сімейний анамнез і тривалість куріння -
+вважаються факторами ризику респіраторних захворювань. 
+Фактори ризику є _кореляційними_ і _не обов'язково причинно-наслідковими_, а кореляція не означає причинно-наслідковий зв'язок.
+Ці фактори ризику можуть підвищувати ризик розвитку респіраторних захворювань, але вони не є _прямими_ або _провідними причинами_ цих захворювань.
+
 ## Inspired by
 
 [Respiratory Diseases Expert System](https://github.com/rayjasson98/Respiratory-Diseases-Expert-System)
 
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Frayjasson98%2FRespiratory-Diseases-Expert-System&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
-
-_[Ray Jasson](mailto:haojie.dev@gmail.com)_<br>
-_30/01/2021_<br>
-
-<br>
-
-## :notebook: Background
-
-This is a simple expert system for diagnosis of respiratory diseases written in JavaScript. The expert system is developed using [rools](https://github.com/frankthelen/rools), a small rule engine for Node.js, and [Handlebars.js](https://github.com/handlebars-lang/handlebars.js), a semantic templating language for JavaScript. [Try it here!](https://respiratory-diseases-es.herokuapp.com/)
-
-<p align=center><img src="/docs/img/ui.png"></p>
-<p align="center"><i>UI of the expert system</i></p>
-
-<br>
-
-A total of 16 respiratory diseases have been selected for differential diagnosis:
-
-- Acute bronchitis
-- Asthma
-- Bronchiectasis
-- Bronchiolitis
-- Chronic Obstructive Pulmonary Disease (COPD)
-- Common cold
-- COVID-19
-- Croup
-- Cystic fibrosis
-- Influenza
-- Lung cancer
-- Occupational lung diseases
-- Pertussis
-- Pneumonia
-- Rhinosinusitis
-- Tuberculosis
-
-The differential diagnosis is based on a set of 13 factors that are categorized into:
-
-- **Epidemiological factors**
-  - Age group
-  - Gender
-  - Family history
-  - Smoking history
-- **Clinical factors**
-  - Duration
-  - Chest pain
-  - Cough
-  - Coughing up blood (Hemoptysis)
-  - Fever
-  - Rapid breathing (Tachypnea)
-  - Rapid heartbeat (Tachycardia)
-  - Shortness of breath (dyspnea)
-  - Wheezing
-
-<br>
-
-## :evergreen_tree: Building Decision Tree using ID3 Algorithm
-
-The [Iterative Dichotomiser 3 (ID3) algorithm](https://en.wikipedia.org/wiki/ID3_algorithm#:~:text=In%20decision%20tree%20learning%2C%20ID3,and%20natural%20language%20processing%20domains.) is used to generate a decision tree for the expert system. The decision tree can be converted into a comparable rule set in which each rule corresponds to a possible path from the root node to any leaf node. The rule set is used as the rule engine for the expert system.
-
-<p align=center><img src="/docs/img/decision_tree.png"></p>
-<p align="center"><i>The decision tree</i></p>
-
-<br>
-
-:unlock: **Note that only 9 out of 13 factors are used to extract the decision rules.**
-
-This is due to 2 rationales:
-
-- The 9 included factors: smoking history, chest pain, cough, coughing up blood, fever, rapid breathing, rapid heartbeat, shortness of breath and wheezing are the primary predictors or indicators of respiratory diseases. These predictors are symptoms that are caused directly by a particular respiratory disease. Smoking history is an exception here. It is not a symptom, but it is the _leading cause_ of most respiratory diseases.
-- The 4 excluded factors: age group, gender, family history and duration are considered as risk factors of respiratory diseases. Risk factors are _correlational_ and _not necessarily causal_, and correlation does not imply causation. These risk factors may increase the risk of developing respiratory diseases, but they are not the _direct_ or _leading causes_ for the diseases.
-
-<br>
-
-## :speech_balloon: Implementation in JavaScript
-
-The decision rules are transformed into JavaScript code using [rools](https://github.com/frankthelen/rools). For example:
-
-```javascript
-const { Rools, Rule } = require("rools");
-const rules = [];
-
-rules[0] = new Rule({
-  name: "pertussis and influenza diagnosis",
-  when: [
-    (facts) => facts.wheezing === "N",
-    (facts) => facts.cough === "dry",
-    (facts) => facts.coughingUpBlood === "N",
-    (facts) => facts.chestPain === "N",
-    (facts) => facts.rapidBreathing === "N",
-    (facts) => facts.rapidHeartbeat === "N",
-  ],
-  then: (facts) => {
-    facts.disease = ["pertussis", "influenza"];
-    facts.percentage = [
-      evaluate("pertussis", facts, data),
-      evaluate("influenza", facts, data),
-    ];
-  },
-});
-
-rules[1] = new Rule({
-  name: "influenza diagnosis 2",
-  when: [
-    (facts) => facts.wheezing === "N",
-    (facts) => facts.cough === "dry",
-    (facts) => facts.coughingUpBlood === "N",
-    (facts) => facts.chestPain === "N",
-    (facts) => facts.rapidBreathing === "N",
-    (facts) => facts.rapidHeartbeat === "Y",
-  ],
-  then: (facts) => {
-    facts.disease = "influenza";
-    facts.percentage = evaluate("influenza", facts, data);
-  },
-});
-```
-
-<br>
-
-## :computer: Program Execution
-
-### **Run locally for development**
-
-Download the code, and from the root directory, run:
-
-```
-npm install
-npm devstart
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### **Deploy the app on cloud**
-
-This app is also deployed on [Heroku](https://www.heroku.com/).
-
-<br>
-
-## :black_nib: References
+## :black_nib: Посилання
 
 - [WikiDoc for Respiratory Disease Differential Diagnosis](https://www.wikidoc.org/index.php/Respiratory_disease_differential_diagnosis)
 - [WikiDoc for COVID-19 Differential Diagnosis](https://www.wikidoc.org/index.php/COVID-19_differential_diagnosis)
