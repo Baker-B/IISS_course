@@ -40,8 +40,8 @@ v16.15.0
 - Застосунок розроблено на базі [Express](https://expressjs.com/uk/), фреймворк для веб-застосунків, побудованих на Node.js.
 - Експертна система розроблена з використанням пакету [rools](https://github.com/frankthelen/rools), невеликого рішення для побудови та обробки правил для Node.js, та [Handlebars.js](https://github.com/handlebars-lang/handlebars.js), мови семантичних шаблонів для JavaScript.
 
-![Інтерфейс експертної системи](/docs/img/ui.png)Інтерфейс експертної системи
-Інтерфейс експертної системи{ width="800" height="600" style="display: block; margin: 0 auto" }
+![Інтерфейс експертної системи](/docs/img/ui.png){ width="800" height="600" style="display: block; margin: 0 auto" }
+Інтерфейс експертної системи
 
 Для диференціальної діагностики було відібрано 16 респіраторних захворювань:
 
@@ -87,7 +87,7 @@ v16.15.0
 
 ![Дерево рішень](/docs/img/decision_tree.png){ width="800" height="600" style="display: block; margin: 0 auto" }
 
-Дерево рішень{ width="800" height="600" style="display: block; margin: 0 auto" }
+Дерево рішень
 
 :unlock: \*\*Зауважте, що лише 9 з 13 факторів використовуються для отримання правил прийняття рішень.
 
